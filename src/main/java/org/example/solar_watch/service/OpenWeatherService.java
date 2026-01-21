@@ -5,6 +5,7 @@ import org.example.solar_watch.model.SunriseSunsetResponse;
 import org.example.solar_watch.model.SunriseSunsetResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,7 +14,8 @@ import java.util.Arrays;
 
 @Service
 public class OpenWeatherService {
-    private static final String API_KEY = System.getenv("OPENWEATHER_API_KEY");
+    @Value("${api.weather.key}")
+    private String API_KEY;
     private static final Logger logger = LoggerFactory.getLogger(OpenWeatherService.class);
 
     private final RestTemplate restTemplate;
