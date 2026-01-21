@@ -27,13 +27,9 @@ public class SunRiseSetControllerTest {
 
     @Test
     void getSunRiseSet_shouldReturnFormattedString() {
-        CityGeoResponse geo = new CityGeoResponse();
-        geo.setLat(12.34);
-        geo.setLon(56.78);
+        CityGeoResponse geo = new CityGeoResponse(12.34, 56.78, null, null, null);
 
-        SunriseSunsetResults results = new SunriseSunsetResults();
-        results.setSunrise("2020-01-01T07:00:00+00:00");
-        results.setSunset("2020-01-01T17:00:00+00:00");
+        SunriseSunsetResults results = new SunriseSunsetResults("2020-01-01T07:00:00+00:00", "2020-01-01T17:00:00+00:00", null,0,null,null);
 
         when(service.getCordForCity(eq("TestCity"))).thenReturn(geo);
         when(service.getSunRiseSet(eq(12.34), eq(56.78), any(LocalDate.class))).thenReturn(results);
