@@ -22,11 +22,11 @@ public class SunRiseSetController {
     @GetMapping("/sunrise-sunset")
     public String getSunRiseSet(@RequestParam String city,@RequestParam LocalDate date) {
         CityGeoResponse location = openWeatherService.getCordForCity(city);
-        var sunRiseSet = openWeatherService.getSunRiseSet(location.getLat(), location.getLon(), date);
+        var sunRiseSet = openWeatherService.getSunRiseSet(location.lat(), location.lon(), date);
         return String.format("In %s on %s, the sun rises at %s and sets at %s",
                 city,
                 date,
-                sunRiseSet.getSunrise(),
-                sunRiseSet.getSunset());
+                sunRiseSet.sunrise(),
+                sunRiseSet.sunset());
     }
 }

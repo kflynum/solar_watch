@@ -38,11 +38,11 @@ public class OpenWeatherService {
     public SunriseSunsetResults getSunRiseSet(double latitude, double longitude, LocalDate date) {
         String url = String.format("https://api.sunrise-sunset.org/json?lat=%f&lng=%f&date=%s&formatted=0", latitude, longitude, date);
         SunriseSunsetResponse response = restTemplate.getForObject(url, SunriseSunsetResponse.class);
-        if (response == null || !"OK".equalsIgnoreCase(response.getStatus())) {
+        if (response == null || !"OK".equalsIgnoreCase(response.status())) {
             throw new IllegalStateException("Invalid response from Sunrise-Sunset API");
         }
         logger.info("Sunrise-Sunset API raw response: {}", response);
 
-        return  response.getResults();
+        return  response.results();
     }
 }

@@ -28,9 +28,7 @@ public class OpenWeatherServiceTest {
 
     @Test
     void getCordForCity_shouldReturnFirstItem_whenResponseNotEmpty() {
-        CityGeoResponse r = new CityGeoResponse();
-        r.setLat(10.5);
-        r.setLon(-20.5);
+        CityGeoResponse r = new CityGeoResponse(10.5, -20.5, null, null, null);
 
         CityGeoResponse[] arr = new CityGeoResponse[]{r};
 
@@ -39,8 +37,8 @@ public class OpenWeatherServiceTest {
         CityGeoResponse result = service.getCordForCity("TestCity");
 
         assertNotNull(result);
-        assertEquals(10.5, result.getLat());
-        assertEquals(-20.5, result.getLon());
+        assertEquals(10.5, result.lat());
+        assertEquals(-20.5, result.lon());
     }
 
     @Test
@@ -53,21 +51,18 @@ public class OpenWeatherServiceTest {
 
     @Test
     void getSunRiseSet_shouldReturnResults_whenStatusOk() {
-        SunriseSunsetResults results = new SunriseSunsetResults();
-        results.setSunrise("2020-01-01T07:00:00+00:00");
-        results.setSunset("2020-01-01T17:00:00+00:00");
+        SunriseSunsetResults results = new SunriseSunsetResults("2020-01-01T07:00:00+00:00",
+                "2020-01-01T07:00:00+00:00", null,0,null,null);
 
-        SunriseSunsetResponse response = new SunriseSunsetResponse();
-        response.setStatus("OK");
-        response.setResults(results);
+        SunriseSunsetResponse response = new SunriseSunsetResponse(results, "OK");
 
         when(restTemplate.getForObject(anyString(), eq(SunriseSunsetResponse.class))).thenReturn(response);
 
         SunriseSunsetResults r = service.getSunRiseSet(1.0, 2.0, LocalDate.of(2020,1,1));
 
         assertNotNull(r);
-        assertEquals("2020-01-01T07:00:00+00:00", r.getSunrise());
-        assertEquals("2020-01-01T17:00:00+00:00", r.getSunset());
+        assertEquals("2020-01-01T07:00:00+00:00", r.sunrise());
+        assertEquals("2020-01-01T17:00:00+00:00", r.sunset());
     }
 
     @Test
@@ -76,8 +71,7 @@ public class OpenWeatherServiceTest {
 
         assertThrows(IllegalStateException.class, () -> service.getSunRiseSet(1.0,2.0, LocalDate.now()));
 
-        SunriseSunsetResponse bad = new SunriseSunsetResponse();
-        bad.setStatus("ERROR");
+        SunriseSunsetResponse bad = new SunriseSunsetResponse(null, "ERROR");
         when(restTemplate.getForObject(anyString(), eq(SunriseSunsetResponse.class))).thenReturn(bad);
 
         assertThrows(IllegalStateException.class, () -> service.getSunRiseSet(1.0,2.0, LocalDate.now()));
