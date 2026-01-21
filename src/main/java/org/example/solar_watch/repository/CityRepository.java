@@ -1,13 +1,13 @@
 package org.example.solar_watch.repository;
 
-import org.example.solar_watch.model.CityGeoResponse;
+import org.example.solar_watch.model.City;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface CityRepository extends JpaRepository<CityGeoResponse, Long> {
+public interface CityRepository extends JpaRepository<City, Long> {
 
-    Optional<CityGeoResponse> findByName(String name);
+    Optional<City> findByName(String name);
 }
