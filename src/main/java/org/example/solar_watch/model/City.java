@@ -1,9 +1,16 @@
 package org.example.solar_watch.model;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class City {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private String name;
     private double latitude;
     private double longitude;
@@ -27,4 +34,7 @@ public class City {
     public String getState() {
         return state;
     }
+
+    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SunriseSunset> sunriseSunsets = new ArrayList<>();
 }
