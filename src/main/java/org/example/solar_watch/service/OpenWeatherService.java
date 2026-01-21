@@ -13,7 +13,7 @@ import java.util.Arrays;
 
 @Service
 public class OpenWeatherService {
-    private static final String API_KEY = "4b0bb550a014c1ff6aa1f85bce949be0";
+    private static final String API_KEY = System.getenv("OPENWEATHER_API_KEY");
     private static final Logger logger = LoggerFactory.getLogger(OpenWeatherService.class);
 
     private final RestTemplate restTemplate;
