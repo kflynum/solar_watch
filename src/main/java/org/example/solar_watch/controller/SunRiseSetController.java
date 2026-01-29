@@ -4,11 +4,13 @@ import org.example.solar_watch.model.*;
 import org.example.solar_watch.service.CityService;
 import org.example.solar_watch.service.OpenWeatherService;
 import org.example.solar_watch.service.SunriseSunsetService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -49,5 +51,56 @@ public class SunRiseSetController {
             suntmp = sunriseSunsetService.getByCityAndDate(citytmp.getId(), date).get();
         }
         return suntmp;
+    }
+    // CREATE
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PostMapping("/cities/{cityId}/sunrise-sunsets")
+    public ResponseEntity<SunriseSunset> create(
+            @PathVariable Long cityId,
+            @RequestBody SunriseSunsetRequest request) {
+
+        SunriseSunset created = sunriseSunsetService.create(cityId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    // READ (all)
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
+    @GetMapping("/cities/{cityId}/sunrise-sunsets")
+    public ResponseEntity<List<SunriseSunset>> getAll(@PathVariable Long cityId) {
+        return ResponseEntity.ok(sunriseSunsetService.getAllForCity(cityId));
+    }
+
+    // READ (by id)
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
+    @GetMapping("/cities/{cityId}/sunrise-sunsets/{id}")
+    public ResponseEntity<SunriseSunset> getById(
+            @PathVariable Long cityId,
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(sunriseSunsetService.getById(cityId, id));
+    }
+
+    // UPDATE
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PutMapping("/cities/{cityId}/sunrise-sunsets/{id}")
+    public ResponseEntity<SunriseSunset> update(
+            @PathVariable Long cityId,
+            @PathVariable Long id,
+            @RequestBody SunriseSunsetRequest request) {
+
+        return ResponseEntity.ok(
+                sunriseSunsetService.update(cityId, id, request)
+        );
+    }
+
+    // DELETE
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @DeleteMapping("/cities/{cityId}/sunrise-sunsets/{id}")
+    public ResponseEntity<Void> delete(
+            @PathVariable Long cityId,
+            @PathVariable Long id) {
+
+        sunriseSunsetService.delete(cityId, id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface SunriseSunsetRepository extends JpaRepository<SunriseSunset, Long> {
     List<SunriseSunset> findByCity(Long cityId);
     Optional<SunriseSunset> findByCityIdAndDate(Long cityId, LocalDate date);
+    List<SunriseSunset> findByCityId(Long cityId);
+    Optional<SunriseSunset> findByIdAndCityId(Long id, Long cityId);
 }
